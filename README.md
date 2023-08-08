@@ -18,7 +18,7 @@ A simple url shortener built using Express.js, MongoDB, Redis and Bull.
 
 ## Routes
 
-### `GET /signup`
+### `GET /`
 
 Renders the home page of the url shortener.
 
