@@ -26,8 +26,6 @@ Renders the home page of the url shortener.
 
 * `Internal Server Error` - An internal server error occured.
 
-## Routes
-
 ### `POST /shorten`
 
 Shortens a given url.
