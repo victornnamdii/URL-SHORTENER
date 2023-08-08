@@ -34,7 +34,9 @@ class urlController {
         })
       }
       const url = await shortUrl.create({ full: req.body.fullUrl });
-      res.status(201).json({ message: "URL Shortened successfully" });
+      res.status(201).json({
+        message: `URL Shortened successfully to ${url.short}`
+      });
     } catch (error) {
       console.log(error);
       res.status(500).json({ error: "Internal Server Error" });
