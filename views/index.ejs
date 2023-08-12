@@ -32,16 +32,16 @@
                 </tr>
             </thead>
             <tbody>
-                <% shortUrls.forEach(shortUrl=> { %>
+                <% rows.forEach(row=> { %>
                     <tr>
-                        <td><a href="<%= shortUrl.full %>">
-                                <%= shortUrl.full %>
+                        <td><a href="<%= row.fullurl %>">
+                                <%= row.fullurl %>
                             </a></td>
-                        <td><a href="<%= shortUrl.short %>">
-                                <%= shortUrl.short %>
+                        <td><a href="<%= row.short %>">
+                                <%= row.short %>
                             </a></td>
                         <td>
-                            <%= shortUrl.clicks %>
+                            <%= row.clicks %>
                         </td>
                     </tr>
                     <% }) %>

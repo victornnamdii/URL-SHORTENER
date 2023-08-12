@@ -1,5 +1,5 @@
 const Queue = require("bull");
-const ShortURL = require("../models/shortUrls");
+const pool = require("../pool/queries");
 require("dotenv").config();
 
 const incrementClickQueue = new Queue("Increment Click", {
@@ -19,20 +19,19 @@ const incrementClickQueue = new Queue("Increment Click", {
 });
 
 incrementClickQueue.on("error", (error) => {
-  logger.info("Increment Click Queue Error");
-  logger.error(error);
+  console.log("Increment Click Queue Error");
+  console.log(error);
 });
 
 // eslint-disable-next-line consistent-return
 incrementClickQueue.process(async (job, done) => {
-  const { id } = job.data;
+  const { shortUrl } = job.data;
   try {
-    const shortUrl = await ShortURL.findById(id);
-    if (shortUrl) {
-      shortUrl.clicks++;
-      await shortUrl.save();
-    }
+    await pool.query("UPDATE shorturls SET clicks = clicks + 1 WHERE short = $1",
+    [shortUrl]
+    );
   } catch (error) {
+    console.log(error)
     return done(error);
   }
   done();

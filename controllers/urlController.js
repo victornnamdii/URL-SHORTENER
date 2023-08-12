@@ -1,6 +1,8 @@
+const shortId = require("shortid");
 const { isURL } = require("validator");
 const { incrementClickQueue } = require('../queues/incrementClickQueue');
-const shortUrl = require('../models/shortUrls');
+const pool = require('../pool/queries');
+
 
 const checkLink = (string) => {
   return isURL(string, {
@@ -13,8 +15,8 @@ const checkLink = (string) => {
 class urlController {
   static async home(req, res) {
     try {
-      const shortUrls = await shortUrl.find()
-      res.render('index', { shortUrls });
+      const { rows } = await pool.query("SELECT * FROM shorturls");
+      res.render('index', { rows });
     } catch (error) {
       console.log(error);
       res.sendStatus(500);
@@ -33,9 +35,13 @@ class urlController {
           error: "Please enter a valid URL. It should start with either 'https://', 'http://' or 'ftp://'"
         })
       }
-      const url = await shortUrl.create({ full: req.body.fullUrl });
+      const shortUrl = shortId.generate();
+      await pool.query(
+        "INSERT INTO shorturls (fullurl, short) VALUES ($1, $2)",
+        [fullUrl, shortUrl]
+      );
       res.status(201).json({
-        message: `URL Shortened successfully to ${url.short}`
+        message: `URL Shortened successfully to ${shortUrl}`
       });
     } catch (error) {
       console.log(error);
@@ -45,16 +51,20 @@ class urlController {
 
   static async redirect(req, res) {
     try {
-      const url = await shortUrl.findOne({ short: req.params.shortUrl });
-      if (!url) {
+      const { shortUrl } = req.params;
+      const { rows } = await pool.query(
+        "SELECT fullurl FROM shorturls WHERE short = $1",
+        [shortUrl]
+      );
+      if (!rows[0]) {
         return res.status(404).json({
           error: "Page not found",
         });
       }
 
-      incrementClickQueue.add({ id: url._id });
+      incrementClickQueue.add({ shortUrl });
 
-      res.redirect(url.full);
+      res.redirect(rows[0].fullurl);
     } catch (error) {
       console.log(error);
       res.status(500).json({ error: "Internal Server Error" });

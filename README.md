@@ -1,17 +1,19 @@
 # URL-SHORTENER
 
-A simple url shortener built using Express.js, MongoDB, Redis and Bull.
+A simple url shortener built using Express.js, PostgreSQL/MongoDB, Redis and Bull.
+The main branch contains the url shortener built with MongoDB. The postgres branch contains the url shortener built with PostgreSQL.
 
 # Requirements
 
-* MongoDB
+* PostgreSQL
 * Node.js
 * Redis
 
 ## Setup
 
 * Run `npm install`.
-* Start MongoDB service.
+* Start PostgreSQL service.
+* Create a Table `shorturls` with columns `short` VARCHAR, `fullurl` VARCHAR and `clicks` INT DEFAULT 0.
 * Start Redis server.
 * Duplicate `env.example` to a `.env` and fill in correct fields.
 * Run `npm run start`.
