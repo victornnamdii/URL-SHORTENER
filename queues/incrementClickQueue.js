@@ -19,8 +19,7 @@ const incrementClickQueue = new Queue("Increment Click", {
 });
 
 incrementClickQueue.on("error", (error) => {
-  logger.info("Increment Click Queue Error");
-  logger.error(error);
+  console.log(error);
 });
 
 // eslint-disable-next-line consistent-return

@@ -1,6 +1,6 @@
 # URL-SHORTENER
 
-A simple url shortener built using Express.js, MongoDB, Redis and Bull.
+A simple url shortener built using Express.js, MongoDB, Redis and Bull. The main branch contains the url shortener built with MongoDB. The postgres branch contains the url shortener built with PostgreSQL.
 
 # Requirements
 
